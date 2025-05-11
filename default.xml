@@ -1,38 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <remote  name="aosp" fetch=".." review="https://android-review.googlesource.com/" />
+  <remote  name="aosp" fetch="https://android-review.googlesource.com/" />
+  <remote  name="duchamp" fetch="https://github.com/mt6897-devs" />
   <default revision="main-kernel-build-2023" remote="aosp" sync-j="4" />
 
   <superproject name="kernel/superproject" remote="aosp" revision="common-android14-6.1-lts" />
 
-  <project path="build/kernel" name="kernel/build" >
+  <!-- Track MediaTek Generic Kernel bazel rules -->
+  <project path="build/kernel" name="kernel/build" remote="aosp">
     <linkfile src="kleaf/bazel.sh" dest="tools/bazel" />
-    <linkfile src="kleaf/bazel.WORKSPACE" dest="WORKSPACE" />
     <linkfile src="build_test.sh" dest="build/build_test.sh" />
     <linkfile src="config.sh" dest="build/config.sh" />
-    <linkfile src="multi-switcher.sh" dest="build/multi-switcher.sh" />
-    <linkfile src="abi" dest="build/abi" />
-    <linkfile src="static_analysis" dest="build/static_analysis" />
   </project>
-  <project path="common" name="kernel/common" revision="android14-6.1-lts" />
-  <project path="kernel/tests" name="kernel/tests" revision="main" />
-  <project path="kernel/configs" name="kernel/configs" />
-  <project path="common-modules/virtual-device" name="kernel/common-modules/virtual-device" revision="android14-6.1" />
-  <project path="prebuilts/clang/host/linux-x86" name="platform/prebuilts/clang/host/linux-x86" clone-depth="1" />
-  <project path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8" name="platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8" clone-depth="1" />
-  <project path="prebuilts/build-tools" name="platform/prebuilts/build-tools" clone-depth="1" />
-  <project path="prebuilts/clang-tools" name="platform/prebuilts/clang-tools" clone-depth="1" />
-  <project path="prebuilts/kernel-build-tools" name="kernel/prebuilts/build-tools" clone-depth="1" />
-  <project path="prebuilts/tradefed" name="platform/tools/tradefederation/prebuilts" revision="main" clone-depth="1" />
-  <project path="prebuilts/asuite" name="platform/prebuilts/asuite" revision="main" clone-depth="1" />
-  <project path="tools/mkbootimg" name="platform/system/tools/mkbootimg" />
+  <project remote="duchamp" name="kernel-build-bazel_mgk_rules" path="build/bazel_mgk_rules" revision="lineage-22.2">
+    <linkfile src="BUILD.bazel" dest="BUILD" />
+    <linkfile src="kleaf/bazel.WORKSPACE" dest="WORKSPACE" />
+  </project>
 
-  <project path="prebuilts/bazel/linux-x86_64" name="platform/prebuilts/bazel/linux-x86_64" clone-depth="1" />
-  <project path="prebuilts/jdk/jdk11" name="platform/prebuilts/jdk/jdk11" clone-depth="1" />
-  <project path="prebuilts/ndk-r23" name="toolchain/prebuilts/ndk/r23" clone-depth="1" />
+  <!-- Track MediaTek Generic Kernel projects -->
+  <project remote="duchamp" name="android_kernel_6.1" path="kernel-6.1" revision="lineage-22.2">
+    <linkfile src="build.config.constants" dest="build.config.constants" />
+  </project>
+  <project remote="duchamp" name="android_kernel_device_modules_6.1" path="kernel_device_modules-6.1" revision="lineage-22.2">
+    <linkfile src="build.config.mtk_kernel_device_modules" dest="build.config" />
+  </project>
+  <project remote="duchamp" name="android_vendor_mediatek_kernel_modules" path="vendor/mediatek/kernel_modules" revision="lineage-22.2"/>
 
-  <project path="external/bazel-skylib" name="platform/external/bazel-skylib" />
-  <project path="build/bazel_common_rules" name="platform/build/bazel_common_rules" />
-  <project path="external/stardoc" name="platform/external/stardoc" />
-  <project path="external/python/absl-py" name="platform/external/python/absl-py" />
+  <project path="kernel/tests" name="kernel/tests" revision="main" remote="aosp"/>
+  <project path="kernel/configs" name="kernel/configs" remote="aosp"/>
+  <project path="prebuilts/clang/host/linux-x86" name="platform/prebuilts/clang/host/linux-x86" clone-depth="1" remote="aosp"/>
+  <project path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8" name="platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8" clone-depth="1" remote="aosp"/>
+  <project path="prebuilts/build-tools" name="platform/prebuilts/build-tools" clone-depth="1" remote="aosp"/>
+  <project path="prebuilts/clang-tools" name="platform/prebuilts/clang-tools" clone-depth="1" remote="aosp"/>
+  <project path="prebuilts/kernel-build-tools" name="kernel/prebuilts/build-tools" clone-depth="1" remote="aosp"/>
+  <project path="prebuilts/tradefed" name="platform/tools/tradefederation/prebuilts" revision="main" clone-depth="1" remote="aosp"/>
+  <project path="prebuilts/asuite" name="platform/prebuilts/asuite" revision="main" clone-depth="1" remote="aosp"/>
+  <project path="tools/mkbootimg" name="platform/system/tools/mkbootimg" remote="aosp"/>
+
+  <project path="prebuilts/bazel/linux-x86_64" name="platform/prebuilts/bazel/linux-x86_64" clone-depth="1" remote="aosp"/>
+  <project path="prebuilts/jdk/jdk11" name="platform/prebuilts/jdk/jdk11" clone-depth="1" remote="aosp"/>
+  <project path="prebuilts/ndk-r23" name="toolchain/prebuilts/ndk/r23" clone-depth="1" remote="aosp"/>
+
+  <project path="external/bazel-skylib" name="platform/external/bazel-skylib" remote="aosp"/>
+  <project path="build/bazel_common_rules" name="platform/build/bazel_common_rules" remote="aosp"/>
+  <project path="external/stardoc" name="platform/external/stardoc" remote="aosp"/>
+  <project path="external/python/absl-py" name="platform/external/python/absl-py" remote="aosp"/>
 </manifest>
